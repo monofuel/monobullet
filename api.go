@@ -1,23 +1,23 @@
-package main
+package monobullet
 
 import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 )
 
 func getUser() (User, error) {
-	endpoint := server + "/v2/users/me"
 	var user User
-	err := getRequest(endpoint, &user)
+	err := getRequest(meEndpoint, &user)
 	return user, err
 }
 
-func getRequest(url string, result interface{}) error {
+func getRequest(endpoint string, result interface{}) error {
 	client := &http.Client{}
-
-	resp, err := client.Get(url)
+	u := url.URL{Scheme: "https", Host: apiServer, Path: endpoint}
+	resp, err := client.Get(u.String())
 	if err != nil {
 		return err
 	}

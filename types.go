@@ -1,4 +1,4 @@
-package main
+package monobullet
 
 type User struct {
 	Created         float32 `json:"created"`

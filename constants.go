@@ -1,3 +1,10 @@
-package main
+package monobullet
 
-var server = "https://api.pushbullet.com"
+var apiServer = "api.pushbullet.com"
+var streamServer = "stream.pushbullet.com"
+
+var meEndpoint = "/v2/users/me"
+
+var websocketEndpoint = "/websocket"
+
+var configFilename = ".monobullet"

@@ -1,4 +1,4 @@
-package main
+package monobullet
 
 import (
 	"io/ioutil"
@@ -9,15 +9,15 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-var configFilename = ".monobullet"
-
 type Config struct {
-	ApiKey string `yaml:"apiKey"`
+	ApiKey     string `yaml:"apiKey"`
+	Realtime   bool   `yaml:"realtime"`
+	DeviceName string `yaml:"deviceName"`
 }
 
-var config Config
+var config *Config
 
-func init() {
+func ConfigFromFile() {
 	user, err := user.Current()
 	if err != nil {
 		log.Fatalln(err)
@@ -37,6 +37,12 @@ func init() {
 	}
 }
 
-func main() {
+func Configuration(c *Config) {
+	config = c
+}
 
+func Start() {
+	if config.Realtime {
+		wsConnect()
+	}
 }
