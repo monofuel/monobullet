@@ -1,19 +1,21 @@
 package monobullet
 
 import (
+	"context"
 	"fmt"
 	"testing"
+	"time"
 )
 
 func TestNote(t *testing.T) {
 	ConfigFromFile()
 	config.Debug = true
-	push := new(Note)
+	push := new(Push)
 	push.Type = NoteType
 	push.Title = "test title"
 	push.Body = "test body"
 
-	resp, err := sendNote(push)
+	resp, err := sendPush(push)
 	if err != nil {
 		t.Error(err)
 	}
@@ -45,5 +47,41 @@ func TestSelf(t *testing.T) {
 	}
 	if user.Created == 0 {
 		t.Error("missing when created")
+	}
+}
+
+func TestLive(t *testing.T) {
+	ConfigFromFile()
+	config.Debug = true
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	go func(ctx context.Context) {
+		wsConnect(ctx)
+	}(ctx)
+
+	push := new(Push)
+	push.Type = NoteType
+	push.Title = "test title"
+	push.Body = "test body"
+
+	go func() {
+		var err error
+		push, err = sendPush(push)
+		if err != nil {
+			t.Error(err)
+		}
+	}()
+
+Poll:
+	for {
+		select {
+		case note := <-PushChannel:
+			if push.Iden == note.Iden {
+				fmt.Printf("got push with correct iden %v\n", push.Iden)
+				break Poll
+			}
+		case <-ctx.Done():
+			t.Error("context cancelled before realtime event received")
+		}
 	}
 }

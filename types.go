@@ -22,7 +22,7 @@ type User struct {
 	Pro             bool    `json:"pro"`
 }
 
-type Note struct {
+type Push struct {
 	Iden                    string   `json:"iden"`
 	Type                    PushType `json:"type"`
 	DeviceIden              string   `json:"device_iden"`
@@ -43,33 +43,8 @@ type Note struct {
 	Direction               string   `json:"direction"`
 	Title                   string   `json:"title"`
 	Body                    string   `json:"body"`
-}
-
-type Link struct {
-	Type       PushType `json:"type"`
-	DeviceIden string   `json:"device_iden"`
-	Email      string   `json:"email"`
-	ChannelTag string   `json:"channel_tag"`
-	ClientIden string   `json:"client_iden"`
-	Active     bool     `json:"active"`
-	Modified   float32  `json:"modified"`
-	Dismissed  bool     `json:"dismissed"`
-	Title      string   `json:"title"`
-	Body       string   `json:"body"`
-	URL        string   `json:"url"`
-}
-
-type File struct {
-	Type       PushType `json:"type"`
-	DeviceIden string   `json:"device_iden"`
-	Email      string   `json:"email"`
-	ChannelTag string   `json:"channel_tag"`
-	ClientIden string   `json:"client_iden"`
-	Active     bool     `json:"active"`
-	Modified   float32  `json:"modified"`
-	Dismissed  bool     `json:"dismissed"`
-	Body       string   `json:"body"`
-	FileName   string   `json:"file_name"`
-	FileType   string   `json:"file_type"`
-	FileURL    string   `json:"file_url"`
+	URL                     string   `json:"url"`
+	FileName                string   `json:"file_name"`
+	FileType                string   `json:"file_type"`
+	FileURL                 string   `json:"file_url"`
 }

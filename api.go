@@ -19,14 +19,29 @@ func getUser() (*User, error) {
 }
 
 type GetPushParams struct {
-	ModifiedAfter float32
+	ModifiedAfter int32
 	Active        bool
 	Cursor        string
 	Limit         int
 }
+type getResp struct {
+	Pushes        []*Push       `json:"pushes"`
+	Profiles      []interface{} `json:"profiles"`
+	Subscriptions []interface{} `json:"subscriptions"`
+	Blocks        []interface{} `json:"blocks"`
+	Chats         []interface{} `json:"chats"`
+	Contacts      []interface{} `json:"contacts"`
+	Devices       []interface{} `json:"devices"`
+	Grants        []interface{} `json:"grants"`
+	Accounts      []interface{} `json:"accounts"`
+	Channels      []interface{} `json:"channels"`
+	Clients       []interface{} `json:"clients"`
+	Texts         []interface{} `json:"texts"`
+}
 
-func getPushes(params GetPushParams) ([]interface{}, error) {
-	var pushes []interface{}
+func getPushes(params GetPushParams) ([]*Push, error) {
+
+	var pushes getResp
 	var query []string
 	if params.ModifiedAfter != 0 {
 		query = append(query, fmt.Sprintf("modified_after=%v", params.ModifiedAfter))
@@ -42,11 +57,11 @@ func getPushes(params GetPushParams) ([]interface{}, error) {
 	}
 
 	err := getRequest(pushEndpoint, &pushes, strings.Join(query, "&"))
-	return pushes, err
+	return pushes.Pushes, err
 }
 
-func sendNote(payload *Note) (*Note, error) {
-	resp := new(Note)
+func sendPush(payload *Push) (*Push, error) {
+	resp := new(Push)
 	err := postRequest(pushEndpoint, payload, resp)
 	return resp, err
 }
