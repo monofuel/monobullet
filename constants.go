@@ -1,10 +1,11 @@
 package monobullet
 
-var apiServer = "api.pushbullet.com"
-var streamServer = "stream.pushbullet.com"
+const apiServer = "api.pushbullet.com"
+const streamServer = "stream.pushbullet.com"
 
-var meEndpoint = "/v2/users/me"
+const meEndpoint = "/v2/users/me"
+const pushEndpoint = "/v2/pushes"
 
-var websocketEndpoint = "/websocket"
+const websocketEndpoint = "/websocket"
 
-var configFilename = ".monobullet"
+const configFilename = ".monobullet"

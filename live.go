@@ -11,7 +11,7 @@ func wsConnect() {
 	u := url.URL{
 		Scheme: "wss",
 		Host:   streamServer,
-		Path:   websocketEndpoint + "/" + config.ApiKey}
+		Path:   websocketEndpoint + "/" + config.APIKey}
 	log.Printf("connecting to websocket stream")
 
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
