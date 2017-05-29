@@ -76,7 +76,6 @@ func wsConnect(ctx context.Context) {
 						if len(handled) > 50 {
 							handled = handled[len(handled)-50:]
 						}
-						fmt.Println(handled)
 						if config.Debug {
 							log.Printf("pushing to channel\n")
 						}
