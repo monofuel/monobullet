@@ -22,6 +22,16 @@ type User struct {
 	Pro             bool    `json:"pro"`
 }
 
+type Device struct {
+	Iden     string  `json:"iden"`
+	Nickname string  `json:"nickname"`
+	Active   bool    `json:"active"`
+	Created  float32 `json:"created"`
+	Modified float32 `json:"modified"`
+	Pushable bool    `json:"pushable"`
+	Icon     string  `json:"icon"`
+}
+
 type Push struct {
 	Iden                    string   `json:"iden"`
 	Type                    PushType `json:"type"`
@@ -38,8 +48,10 @@ type Push struct {
 	SenderEmailNormalized   string   `json:"sender_email_normalized"`
 	Created                 float32  `json:"created"`
 	ReceiverEmail           string   `json:"receiver_email"`
-	ReceiverEmailNormalized string   `json:"reciever_email_normalized"`
+	ReceiverEmailNormalized string   `json:"receiver_email_normalized"`
 	ReceiverIden            string   `json:"receiver_iden"`
+	TargetDeviceIden        string   `json:"target_device_iden"`
+	SourceDeviceIden        string   `json:"source_device_iden"`
 	Direction               string   `json:"direction"`
 	Title                   string   `json:"title"`
 	Body                    string   `json:"body"`
@@ -47,4 +59,5 @@ type Push struct {
 	FileName                string   `json:"file_name"`
 	FileType                string   `json:"file_type"`
 	FileURL                 string   `json:"file_url"`
+	AwakeAppGuids           []string `json:"awake_app_guids"`
 }

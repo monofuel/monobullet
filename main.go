@@ -47,6 +47,10 @@ func Configuration(c *Config) {
 
 // Start the websocket connection for realtime
 func Start(ctx context.Context) {
+	wsConnect(ctx)
+}
+
+func AddOwnDevice() (*Device, error) {
 	if "" == config.DeviceName {
 		var err error
 		config.DeviceName, err = os.Hostname()
@@ -55,5 +59,13 @@ func Start(ctx context.Context) {
 		}
 	}
 
-	wsConnect(ctx)
+	device, err := getOwnDevice()
+	if err == DeviceMissingError {
+		return addDevice(&Device{
+			Nickname: config.DeviceName,
+		})
+	} else if err != nil {
+		return nil, err
+	}
+	return device, nil
 }

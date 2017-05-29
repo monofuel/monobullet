@@ -42,7 +42,7 @@ func wsConnect(ctx context.Context) {
 		}
 	}(c, recv)
 	lastUpdateTimestamp := int32(time.Now().Unix())
-
+	log.Printf("listening for websocket events")
 	for {
 		select {
 		case message := <-recv:
@@ -59,6 +59,9 @@ func wsConnect(ctx context.Context) {
 					}
 					lastUpdateTimestamp = int32(time.Now().Unix())
 					for _, push := range newPushes {
+						if config.Debug {
+							log.Printf("pushing to channel\n")
+						}
 						PushChannel <- push
 					}
 				default:

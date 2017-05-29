@@ -15,7 +15,7 @@ func TestNote(t *testing.T) {
 	push.Title = "test title"
 	push.Body = "test body"
 
-	resp, err := sendPush(push)
+	resp, err := SendPush(push)
 	if err != nil {
 		t.Error(err)
 	}
@@ -50,6 +50,52 @@ func TestSelf(t *testing.T) {
 	}
 }
 
+func TestDevices(t *testing.T) {
+	ConfigFromFile()
+	config.Debug = true
+
+	devices, err := getDevices()
+	if err != nil {
+		t.Error(err)
+	}
+	fmt.Printf("fetched %v devices\n", len(devices))
+}
+
+func TestAddSelf(t *testing.T) {
+	ConfigFromFile()
+	config.Debug = true
+	config.DeviceName = "goTest"
+
+	device, err := getOwnDevice()
+	if err != DeviceMissingError {
+		t.Error("goTest device already exists")
+	}
+	device, err = addDevice(&Device{
+		Nickname: config.DeviceName,
+	})
+	if err != nil {
+		t.Error(err)
+	}
+	if device.Nickname != config.DeviceName {
+		t.Errorf("invalid device name. got %v, expected %v", device.Nickname, config.DeviceName)
+	}
+
+}
+
+func TestRemoveSelf(t *testing.T) {
+	ConfigFromFile()
+	config.Debug = true
+	config.DeviceName = "goTest"
+
+	device, err := getOwnDevice()
+	if err == DeviceMissingError {
+		t.Error("goTest device missing")
+	}
+	if device.Iden != "" {
+		removeDevice(device.Iden)
+	}
+}
+
 func TestLive(t *testing.T) {
 	ConfigFromFile()
 	config.Debug = true
@@ -66,7 +112,7 @@ func TestLive(t *testing.T) {
 
 	go func() {
 		var err error
-		push, err = sendPush(push)
+		push, err = SendPush(push)
 		if err != nil {
 			t.Error(err)
 		}
