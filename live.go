@@ -17,6 +17,8 @@ type RealtimeEvent struct {
 
 var PushChannel = make(chan *Push)
 
+var handled []string
+
 func wsConnect(ctx context.Context) {
 	u := url.URL{
 		Scheme: "wss",
@@ -59,6 +61,22 @@ func wsConnect(ctx context.Context) {
 					}
 					lastUpdateTimestamp = int32(time.Now().Unix())
 					for _, push := range newPushes {
+						isHandled := false
+						for _, handled := range handled {
+							if push.Iden == handled {
+								isHandled = true
+								continue
+							}
+						}
+						if isHandled {
+							continue
+						}
+						// dedup last 50 pushes
+						handled = append(handled, push.Iden)
+						if len(handled) > 50 {
+							handled = handled[len(handled)-50:]
+						}
+						fmt.Println(handled)
 						if config.Debug {
 							log.Printf("pushing to channel\n")
 						}
